@@ -1,0 +1,178 @@
+/* Estilo del contenedor principal */
+.multas-container {
+    overflow: hidden; /* Evita desplazamientos inesperados */
+    min-height: 100vh; /* Asegura que ocupe al menos toda la altura de la pantalla */
+    width: 100vw; /* Asegura que ocupe todo el ancho de la pantalla */
+    display: flex;
+    flex-direction: column; /* Permite que los elementos se apilen verticalmente */
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Permite usar el pseudo-elemento relativo a este contenedor */
+    z-index: 1; /* Coloca el contenido encima del fondo */
+    margin: 0; /* Elimina cualquier margen por defecto */
+    padding: 0; /* Elimina cualquier padding por defecto */
+}
+
+/* Pseudo-elemento para el fondo con blur */
+.multas-container::before {
+    content: ''; /* Crea el pseudo-elemento */
+    position: fixed; /* Fija el fondo para que abarque toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Asegura que cubra todo el ancho de la ventana */
+    height: 100vh; /* Asegura que cubra toda la altura de la ventana */
+    background-image: url('./assets/imgs/condominio4.jpg'); /* Ruta de la imagen */
+    background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    filter: blur(8px); /* Aplica el desenfoque al fondo */
+    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+}
+
+/* Estilo del logo */
+.logo {
+    width: 400px; /* Ajusta este tamaño según sea necesario */
+    margin-bottom: 20px;
+    z-index: 1; /* Asegura que el logo esté por encima del fondo */
+}
+
+/* Estilo del texto de administración */
+.multas-text {
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Mejora la legibilidad del texto */
+    z-index: 1; /* Asegura que el texto esté por encima del fondo */
+}
+
+/* Estilo de los filtros y acciones */
+.filtros {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filtros input, .filtros select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+    color: black;
+}
+
+.filtros input:focus, .filtros select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.filtros .btn-action {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filtros .btn-action:hover {
+    background-color: #218838;
+}
+
+/* Estilos de la tabla */
+.multas-list {
+    width: 80%;
+    margin-top: 20px;
+}
+
+.multas-list table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo semitransparente */
+}
+
+.multas-list th, .multas-list td {
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.multas-list th {
+    background-color: #8AB545;
+    color: white;
+    font-weight: 600;
+}
+
+.multas-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.multas-list tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.multas-list td {
+    color: #333;
+}
+
+/* Bordes y sombreados */
+.multas-list td, .multas-list th {
+    border-bottom: 1px solid #ddd;
+}
+
+.multas-list td:last-child, .multas-list th:last-child {
+    border-right: none;
+}
+
+.multas-list .btn-action-table {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.multas-list .btn-action-table:hover {
+    background-color: #0056b3;
+}
+
+/* Ajuste para dispositivos pequeños */
+@media (max-width: 768px) {
+    .multas-list table {
+        font-size: 14px;
+    }
+
+    .filtros {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filtros input, .filtros select, .filtros .btn-action {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+
+.btn-accion {
+    padding: 5px 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-accion:hover {
+    background-color: #00939D;
+}

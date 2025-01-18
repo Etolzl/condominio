@@ -1,0 +1,101 @@
+/* src/Login.css */
+
+.login-container {
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Evita desplazamientos inesperados */
+    min-height: 100vh;  /* Asegura que ocupe al menos toda la altura de la pantalla */
+    width: 100%;  /* Asegura que ocupe todo el ancho */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;  /* Garantiza que se extienda a través de la pantalla */
+    top: 0;
+    left: 0;
+}
+
+.login-image {
+    flex: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Evita que la imagen se salga del contenedor */
+    min-height: 100vh;  /* Asegura que ocupe al menos toda la altura de la pantalla */
+}
+
+.login-image img {
+    width: 100%; /* Abarca todo el ancho */
+    height: 100%; /* Abarca toda la altura */
+    object-fit: cover; /* Mantiene proporciones y llena el espacio */
+    min-height: 100vh;  /* Asegura que ocupe al menos toda la altura de la pantalla */
+}
+
+.login-form {
+    flex: 3;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;  /* Asegura que ocupe al menos toda la altura de la pantalla */
+}
+
+.form-content {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    padding: 20px; /* Asegura un espacio interno uniforme */
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+    font-weight: bold;
+}
+
+.form-content label{
+    color: black;
+}
+
+.form-logo {
+    width: 400px;
+    justify-content: center;
+}
+
+
+h2 {
+    color: #333;
+    font-size: 35px;
+}
+
+p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Añade separación uniforme entre grupos */
+}
+
+.form-input,
+.form-button {
+    width: 100%; /* Asegura que inputs y botón ocupen el mismo ancho */
+    padding: 10px;
+    margin: 10px 0; /* Márgenes verticales uniformes */
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+}
+
+.form-input {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: black;
+}
+
+.form-button {
+    background-color: #8AB545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-button:hover {
+    background-color: #00939D;
+}
