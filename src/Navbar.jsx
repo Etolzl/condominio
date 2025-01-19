@@ -1,14 +1,19 @@
 // src/Navbar.jsx
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Usa Link en lugar de <a>
+import { Link, useNavigate } from 'react-router-dom';  // Importamos useNavigate
 import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();  // Inicializamos useNavigate
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+    };
+
+    const handleLogout = () => {
+        navigate('/login');  // Redirige al Login.jsx
     };
 
     return (
@@ -43,7 +48,7 @@ const Navbar = () => {
                         <Link to="/permisos">Permisos de Portones</Link>
                     </li>
                 </ul>
-                <button className="logout-button">Cerrar Sesión</button>
+                <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
             </div>
         </nav>
     );
