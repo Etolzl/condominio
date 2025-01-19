@@ -1,30 +1,15 @@
+// src/Navbar.jsx
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // Importamos useLocation
+import { Link } from 'react-router-dom';  // Usa Link en lugar de <a>
 import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation(); // Detecta la ruta actual
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
-
-    const handleLogout = () => {
-        navigate('/login'); // Redirige al componente Login.jsx
-    };
-
-    // Links del menú con sus rutas
-    const menuItems = [
-        { name: 'Inicio', path: '/bienvenida' },
-        { name: 'Panel de Control', path: '/dashboard' },
-        { name: 'Administrar Usuarios', path: '/usuarios' },
-        { name: 'Administrar Pagos', path: '/pagos' },
-        { name: 'Administrar Multas', path: '/multas' },
-        { name: 'Permisos de Portones', path: '/permisos' },
-    ];
 
     return (
         <nav className="navbar">
@@ -39,18 +24,26 @@ const Navbar = () => {
                     {menuOpen ? '✖' : '☰'}
                 </button>
                 <ul className={`navbar-menu ${menuOpen ? 'show' : ''}`}>
-                    {menuItems.map((item) => (
-                        <li
-                            key={item.path}
-                            className={location.pathname === item.path ? 'active' : ''}
-                        >
-                            <a href={item.path}>{item.name}</a>
-                        </li>
-                    ))}
+                    <li>
+                        <Link to="/bienvenida">Inicio</Link>
+                    </li>
+                    <li>
+                        <Link to="/dashboard">Panel de Control</Link>
+                    </li>
+                    <li>
+                        <Link to="/usuarios">Administrar Usuarios</Link>
+                    </li>
+                    <li>
+                        <Link to="/pagos">Administrar Pagos</Link>
+                    </li>
+                    <li>
+                        <Link to="/multas">Administrar Multas</Link>
+                    </li>
+                    <li>
+                        <Link to="/permisos">Permisos de Portones</Link>
+                    </li>
                 </ul>
-                <button className="logout-button" onClick={handleLogout}>
-                    Cerrar Sesión
-                </button>
+                <button className="logout-button">Cerrar Sesión</button>
             </div>
         </nav>
     );
