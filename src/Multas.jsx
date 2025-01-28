@@ -16,7 +16,7 @@ const Multas = () => {
 
     // Realizamos la consulta a la API de Express
     useEffect(() => {
-        fetch('http://localhost:4001/api/multas')
+        fetch('https://api-condominio-su1h.onrender.com/api/multas')
             .then(response => response.json())
             .then(data => {
                 setMultas(data);

@@ -17,7 +17,7 @@ const RegistrarMultas = () => {
 
   // Obtener departamentos desde la API
   useEffect(() => {
-    fetch('http://localhost:4001/api/departamentos') // URL para obtener departamentos
+    fetch('https://api-condominio-su1h.onrender.com/api/departamentos') // URL para obtener departamentos
       .then((response) => response.json())
       .then((data) => setDepartamentos(data))
       .catch((error) => console.error('Error obteniendo departamentos:', error));
@@ -42,7 +42,7 @@ const handleRegisterMulta = () => {
     comentarios: comentario  // Aquí estás pasando el estado de 'comentario'
   };
 
-  fetch('http://localhost:4001/api/multas', {
+  fetch('https://api-condominio-su1h.onrender.com/api/multas', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

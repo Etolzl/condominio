@@ -23,7 +23,7 @@ const Navbar = () => {
         if (iddepa) {
             const fetchNotificaciones = async () => {
                 try {
-                    const response = await fetch(`http://localhost:4001/api/multas/notificaciones/${iddepa}`);
+                    const response = await fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`);
                     const data = await response.json();
                     setNotificaciones(data);
                 } catch (error) {
