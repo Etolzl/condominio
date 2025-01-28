@@ -1,0 +1,33 @@
+.notificaciones-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.notificaciones-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.notificaciones-container li {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: black;
+}
+
+.eliminar-notificacion {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.eliminar-notificacion:hover {
+    background-color: #e60000;
+}

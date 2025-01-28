@@ -1,20 +1,46 @@
-// src/Navbar.jsx
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';  // Importamos useNavigate
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate();  // Inicializamos useNavigate
+    const [notificaciones, setNotificaciones] = useState([]);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
     const handleLogout = () => {
-        navigate('/login');  // Redirige al Login.jsx
+        localStorage.clear(); // Limpiar almacenamiento local al cerrar sesión
+        navigate('/login');
     };
+
+    useEffect(() => {
+        const iddepa = localStorage.getItem('iddepa');
+
+        if (iddepa) {
+            const fetchNotificaciones = async () => {
+                try {
+                    const response = await fetch(`http://localhost:4001/api/multas/notificaciones/${iddepa}`);
+                    const data = await response.json();
+                    setNotificaciones(data);
+                } catch (error) {
+                    console.error('Error al obtener notificaciones:', error);
+                }
+            };
+
+            // Consulta inicial
+            fetchNotificaciones();
+
+            // Consulta periódica cada 10 segundos
+            const interval = setInterval(fetchNotificaciones, 10000);
+
+            // Limpiar intervalo al desmontar
+            return () => clearInterval(interval);
+        }
+    }, []);
 
     return (
         <nav className="navbar">
@@ -48,6 +74,17 @@ const Navbar = () => {
                         <Link to="/permisos">Permisos de Portones</Link>
                     </li>
                 </ul>
+
+                {/* Sección de notificaciones */}
+                <div className="notificaciones">
+                    <button
+                        className="notificaciones-boton"
+                        onClick={() => navigate('/notificaciones')}
+                    >
+                        Notificaciones ({notificaciones.length})
+                    </button>
+                </div>
+
                 <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
             </div>
         </nav>

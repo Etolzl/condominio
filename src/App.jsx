@@ -12,6 +12,10 @@ import RegistrarPagos from './registrarPagos';
 import RegistrarMultas from './registrarMultas';
 import AsignarPermiso from './asignarPermiso';
 
+import BienvenidaUsuario from './bienvenidaUsuario';
+import BienvenidaDueño from './bienvenidaDueño';
+import Notificaciones from './Notificaciones';
+
 
 const App = () => {
     return (
@@ -29,6 +33,9 @@ const App = () => {
             <Route path="/registrar-pagos" element={<RegistrarPagos />} />
             <Route path="/registrar-multas" element={<RegistrarMultas />} />
             <Route path="/asignar-permiso" element={<AsignarPermiso />} />
+            <Route path="/bienvenida-usuario" element={<BienvenidaUsuario />} />
+            <Route path="/bienvenida-dueño" element={<BienvenidaDueño />} />
+            <Route path="/notificaciones" element={<Notificaciones />} />
         </Routes>
     );
 };

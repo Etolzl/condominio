@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import './Multas.css';
 import logoImage from './assets/imgs/logo.png';
 import Navbar from './Navbar';
@@ -14,17 +14,17 @@ const Multas = () => {
         estado: '',
     });
 
-    // Datos de ejemplo para las multas
+    // Realizamos la consulta a la API de Express
     useEffect(() => {
-        const multasSimuladas = [
-            { id: 1, fecha: '2025-01-10', monto: 1500, estado: 'Pendiente', usuario: 'Juan Pérez' },
-            { id: 2, fecha: '2025-01-08', monto: 2000, estado: 'Pagada', usuario: 'Ana López' },
-            { id: 3, fecha: '2025-01-05', monto: 1200, estado: 'Pendiente', usuario: 'Carlos García' },
-            { id: 4, fecha: '2024-12-25', monto: 1800, estado: 'Pagada', usuario: 'Marta Rodríguez' },
-        ];
-        setMultas(multasSimuladas);
-        setFilteredMultas(multasSimuladas);
+        fetch('http://localhost:4001/api/multas')
+            .then(response => response.json())
+            .then(data => {
+                setMultas(data);
+                setFilteredMultas(data); // Filtrar los datos según sea necesario
+            })
+            .catch(error => console.error('Error al obtener las multas:', error));
     }, []);
+    
 
     // Filtrar multas basado en los filtros seleccionados
     useEffect(() => {
@@ -41,7 +41,7 @@ const Multas = () => {
 
     const handleActualizarEstado = (id) => {
         const nuevasMultas = multas.map((multa) =>
-            multa.id === id ? { ...multa, estado: multa.estado === 'Pendiente' ? 'Pagada' : 'Pendiente' } : multa
+            multa._idmulta === id ? { ...multa, estadoDelPago: multa.estadoDelPago === 'Pendiente' ? 'Pagada' : 'Pendiente' } : multa
         );
         setMultas(nuevasMultas);
     };
@@ -86,7 +86,7 @@ const Multas = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Usuario</th>
+                            <th>Departamento</th>
                             <th>Fecha</th>
                             <th>Monto</th>
                             <th>Estado</th>
@@ -95,17 +95,17 @@ const Multas = () => {
                     </thead>
                     <tbody>
                         {filteredMultas.map((multa) => (
-                            <tr key={multa.id}>
-                                <td>{multa.usuario}</td>
+                            <tr key={multa._idmulta}>
+                                <td>{multa.departamento.nombreDepartamento}</td>
                                 <td>{multa.fecha}</td>
                                 <td>${multa.monto}</td>
-                                <td>{multa.estado}</td>
+                                <td>{multa.estadoDelPago}</td>
                                 <td>
                                     <button
-                                        onClick={() => handleActualizarEstado(multa.id)}
+                                        onClick={() => handleActualizarEstado(multa._idmulta)}
                                         className="btn-accion"
                                     >
-                                        {multa.estado === 'Pendiente' ? 'Marcar como Pagada' : 'Marcar como Pendiente'}
+                                        {multa.estadoDelPago === 'Pendiente' ? 'Marcar como Pagada' : 'Marcar como Pendiente'}
                                     </button>
                                 </td>
                             </tr>
