@@ -15,28 +15,29 @@ const RegistrarMultas = () => {
   const [comentario, setComentario] = useState('');
   const [selectedDepartamento, setSelectedDepartamento] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     fetch('https://api-condominio-su1h.onrender.com/api/departamentos')
-      .then((response) => response.json())
-      .then((data) => setDepartamentos(data))
-      .catch((error) => console.error('Error obteniendo departamentos:', error));
+      .then(response => response.json())
+      .then(data => setDepartamentos(data))
+      .catch(error => console.error('Error obteniendo departamentos:', error));
   }, []);
 
   const handleRegisterMulta = () => {
+    setLoading(true);
     const departamentoSeleccionado = departamentos.find(
-      (departamento) => departamento.nombreDepartamento === selectedDepartamento
+      departamento => departamento.nombreDepartamento === selectedDepartamento
     );
 
     if (!departamentoSeleccionado) {
-      setModalMessage('Por favor, selecciona un departamento válido.');
-      setShowModal(true);
+      setLoading(false);
+      setModalMessage('Por favor selecciona un departamento válido.');
+      setModalVisible(true);
       return;
     }
 
-    setLoading(true);
     const multaData = {
       departamento: {
         _iddepa: departamentoSeleccionado._iddepa,
@@ -55,17 +56,17 @@ const RegistrarMultas = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(multaData),
     })
-      .then((response) => response.json())
+      .then(response => response.json())
       .then(() => {
         setLoading(false);
         setModalMessage('Multa registrada exitosamente.');
-        setShowModal(true);
+        setModalVisible(true);
+        setTimeout(() => navigate('/multas'), 2000);
       })
-      .catch((error) => {
-        console.error('Error registrando la multa:', error);
+      .catch(error => {
         setLoading(false);
         setModalMessage('Error registrando la multa. Inténtalo de nuevo.');
-        setShowModal(true);
+        setModalVisible(true);
       });
   };
 
@@ -74,45 +75,45 @@ const RegistrarMultas = () => {
       <Navbar />
       <img src={logoImage} alt="Logo del sistema" className="logo" />
       <h1 className="registrarmultas-text">Registrar Multa</h1>
-
       <div className="form-container">
-        <label htmlFor="departamento" className="form-label">Departamento</label>
-        <select id="departamento" className="select-field" value={selectedDepartamento} onChange={(e) => setSelectedDepartamento(e.target.value)}>
+        <label className="form-label">Departamento</label>
+        <select className="select-field" value={selectedDepartamento} onChange={e => setSelectedDepartamento(e.target.value)}>
           <option value="">Selecciona un departamento</option>
-          {departamentos.map((departamento) => (
-            <option key={departamento._id} value={departamento.nombreDepartamento}>{departamento.nombreDepartamento}</option>
+          {departamentos.map(departamento => (
+            <option key={departamento._id} value={departamento.nombreDepartamento}>
+              {departamento.nombreDepartamento}
+            </option>
           ))}
         </select>
 
-        <label htmlFor="motivo" className="form-label">Motivo</label>
-        <input type="text" id="motivo" className="input-field" placeholder="Ingresa el motivo de la multa" value={motivo} onChange={(e) => setMotivo(e.target.value)} />
+        <label className="form-label">Motivo</label>
+        <input type="text" className="input-field" value={motivo} onChange={e => setMotivo(e.target.value)} />
 
-        <label htmlFor="monto" className="form-label">Monto</label>
-        <input type="number" id="monto" className="input-field" placeholder="Ingresa el monto" value={monto} onChange={(e) => setMonto(e.target.value)} />
+        <label className="form-label">Monto</label>
+        <input type="number" className="input-field" value={monto} onChange={e => setMonto(e.target.value)} />
 
-        <label htmlFor="fecha" className="form-label">Fecha</label>
-        <input type="date" id="fecha" className="input-field" value={fecha} onChange={(e) => setFecha(e.target.value)} />
+        <label className="form-label">Fecha</label>
+        <input type="date" className="input-field" value={fecha} onChange={e => setFecha(e.target.value)} />
 
-        <label htmlFor="estado" className="form-label">Estado de Pago</label>
-        <select id="estado" className="select-field" value={estado} onChange={(e) => setEstado(e.target.value)}>
+        <label className="form-label">Estado de Pago</label>
+        <select className="select-field" value={estado} onChange={e => setEstado(e.target.value)}>
           <option value="">Selecciona el estado</option>
           <option value="pagado">Pagado</option>
           <option value="pendiente">Pendiente</option>
         </select>
 
-        <label htmlFor="comentario" className="form-label">Comentario</label>
-        <textarea id="comentario" className="input-field" value={comentario} onChange={(e) => setComentario(e.target.value)} placeholder="Escribe un comentario" />
+        <label className="form-label">Comentario</label>
+        <textarea className="input-field" value={comentario} onChange={e => setComentario(e.target.value)}></textarea>
 
         <button className="btn-register" onClick={handleRegisterMulta} disabled={loading}>
-          {loading ? 'Cargando...' : 'Registrar Multa'}
+          {loading ? 'Registrando...' : 'Registrar Multa'}
         </button>
       </div>
-
-      <CSSTransition in={showModal} timeout={300} classNames="fade" unmountOnExit>
-        <div className="modal">
+      <CSSTransition in={modalVisible} timeout={300} classNames="modal" unmountOnExit>
+        <div className="modal-overlay" onClick={() => setModalVisible(false)}>
           <div className="modal-content">
             <p>{modalMessage}</p>
-            <button onClick={() => setShowModal(false)}>Cerrar</button>
+            <button onClick={() => setModalVisible(false)}>Cerrar</button>
           </div>
         </div>
       </CSSTransition>
