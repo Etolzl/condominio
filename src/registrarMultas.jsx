@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import './registrarMultas.css';
@@ -17,25 +17,57 @@ const RegistrarMultas = () => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const modalRef = useRef(null); // Crear una referencia para el modal
 
   useEffect(() => {
-    fetch('https://api-condominio-su1h.onrender.com/api/departamentos')
-      .then((response) => response.json())
-      .then((data) => setDepartamentos(data))
-      .catch((error) => console.error('Error obteniendo departamentos:', error));
+    const token = localStorage.getItem("token"); // Obtener el token almacenado
+  
+    fetch("https://api-condominio-su1h.onrender.com/api/departamentos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Enviar token en el header
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: No autorizado`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDepartamentos(data);
+        } else {
+          setDepartamentos([]); // Evita el error de `map` si la API devuelve un objeto incorrecto
+        }
+      })
+      .catch((error) => {
+        console.error("Error obteniendo departamentos:", error);
+        setDepartamentos([]); // En caso de error, aseguramos que departamentos sea un array vacío
+      });
   }, []);
+  
 
   const handleRegisterMulta = () => {
     const departamentoSeleccionado = departamentos.find(
       (departamento) => departamento.nombreDepartamento === selectedDepartamento
     );
-
+  
     if (!departamentoSeleccionado) {
       setModalMessage('Por favor, selecciona un departamento válido.');
       setShowModal(true);
       return;
     }
-
+  
+    const token = localStorage.getItem("token"); // Obtener el token
+  
+    if (!token) {
+      setModalMessage('No tienes permiso para registrar multas.');
+      setShowModal(true);
+      return;
+    }
+  
     setLoading(true);
     const multaData = {
       departamento: {
@@ -49,13 +81,21 @@ const RegistrarMultas = () => {
       estadoDelPago: estado,
       comentarios: comentario,
     };
-
+  
     fetch('https://api-condominio-su1h.onrender.com/api/multas', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}` // 🔹 Agregar el token al header
+      },
       body: JSON.stringify(multaData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: No autorizado`);
+        }
+        return response.json();
+      })
       .then(() => {
         setLoading(false);
         setModalMessage('Multa registrada exitosamente.');
@@ -68,6 +108,12 @@ const RegistrarMultas = () => {
         setShowModal(true);
       });
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate('/multas'); // Redirigir a Multas.jsx
+  };
+  
 
   return (
     <div className="registrarmultas-container">
@@ -108,11 +154,13 @@ const RegistrarMultas = () => {
         </button>
       </div>
 
-      <CSSTransition in={showModal} timeout={300} classNames="fade" unmountOnExit>
-        <div className="modal">
-          <div className="modal-content">
-            <p>{modalMessage}</p>
-            <button onClick={() => setShowModal(false)}>Cerrar</button>
+      <CSSTransition in={showModal} timeout={300} classNames="fade" unmountOnExit nodeRef={modalRef}>
+        <div className="modal-overlay show" ref={modalRef}>
+          <div className="modal">
+            <div className="modal-content">
+              <p>{modalMessage}</p>
+              <button className="modal-close" onClick={handleCloseModal}>Cerrar</button>
+            </div>
           </div>
         </div>
       </CSSTransition>

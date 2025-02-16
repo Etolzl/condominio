@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode'; // Importar jwtDecode
 import './Notificaciones.css';
 
 const Notificaciones = () => {
     const [notificaciones, setNotificaciones] = useState([]);
 
     useEffect(() => {
-        const iddepa = localStorage.getItem('iddepa');
+        const token = localStorage.getItem('token');
 
-        if (iddepa) {
-            const fetchNotificaciones = async () => {
-                try {
-                    const response = await fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`);
-                    const data = await response.json();
-                    setNotificaciones(data);
-                } catch (error) {
-                    console.error('Error al obtener notificaciones:', error);
+        if (token) {
+            try {
+                const decoded = jwtDecode(token); // Decodificar token correctamente
+                const iddepa = decoded.iddepa;
+                console.log("ID Departamento obtenido del token:", iddepa);
+
+                if (iddepa) {
+                    fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Notificaciones recibidas:", data);
+                            setNotificaciones(data);
+                        })
+                        .catch(error => console.error('Error al obtener notificaciones:', error));
                 }
-            };
-
-            fetchNotificaciones();
+            } catch (error) {
+                console.error('Error al decodificar el token:', error);
+            }
         }
     }, []);
 
@@ -27,7 +43,7 @@ const Notificaciones = () => {
             const response = await fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${id}`, {
                 method: 'DELETE',
             });
-    
+
             if (response.ok) {
                 setNotificaciones((prev) => prev.filter((notificacion) => notificacion._id !== id));
             } else {
@@ -37,7 +53,7 @@ const Notificaciones = () => {
             console.error('Error al eliminar la notificación:', error);
         }
     };
-    
+
     return (
         <div className="notificaciones-container">
             <h1>Notificaciones</h1>

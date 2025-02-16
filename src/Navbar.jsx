@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
 
@@ -7,7 +8,7 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificaciones, setNotificaciones] = useState([]);
     const navigate = useNavigate();
-
+    
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
@@ -18,29 +19,46 @@ const Navbar = () => {
     };
 
     useEffect(() => {
-        const iddepa = localStorage.getItem('iddepa');
-
-        if (iddepa) {
-            const fetchNotificaciones = async () => {
-                try {
-                    const response = await fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`);
-                    const data = await response.json();
-                    setNotificaciones(data);
-                } catch (error) {
-                    console.error('Error al obtener notificaciones:', error);
+        const token = localStorage.getItem('token');
+    
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const iddepa = decoded.iddepa;
+                //console.log("ID Departamento obtenido del token:", iddepa); // Depuración
+    
+                if (iddepa) {
+                    const fetchNotificaciones = async () => {
+                        try {
+                            //console.log(`Consultando notificaciones en: https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`); // Depuración
+                            const response = await fetch(`https://api-condominio-su1h.onrender.com/api/multas/notificaciones/${iddepa}`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            });
+    
+                            if (!response.ok) {
+                                throw new Error(`Error HTTP: ${response.status}`);
+                            }
+    
+                            const data = await response.json();
+                            //console.log("Notificaciones recibidas:", data); // Depuración
+                            setNotificaciones(data);
+                        } catch (error) {
+                            console.error('Error al obtener notificaciones:', error);
+                        }
+                    };
+    
+                    fetchNotificaciones();
+                    const interval = setInterval(fetchNotificaciones, 10000);
+                    return () => clearInterval(interval);
                 }
-            };
-
-            // Consulta inicial
-            fetchNotificaciones();
-
-            // Consulta periódica cada 10 segundos
-            const interval = setInterval(fetchNotificaciones, 10000);
-
-            // Limpiar intervalo al desmontar
-            return () => clearInterval(interval);
+            } catch (error) {
+                console.error('Error al decodificar el token:', error);
+            }
         }
     }, []);
+    
 
     return (
         <nav className="navbar">

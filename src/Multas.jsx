@@ -16,14 +16,20 @@ const Multas = () => {
 
     // Realizamos la consulta a la API de Express
     useEffect(() => {
-        fetch('https://api-condominio-su1h.onrender.com/api/multas')
-            .then(response => response.json())
-            .then(data => {
-                setMultas(data);
-                setFilteredMultas(data); // Filtrar los datos según sea necesario
-            })
-            .catch(error => console.error('Error al obtener las multas:', error));
+        const token = localStorage.getItem('token'); 
+        
+        fetch('https://api-condominio-su1h.onrender.com/api/multas', {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(response => response.json())
+        .then(data => {
+            //console.log("Multas recibidas:", data); // Agregar este console.log para depurar
+            setMultas(data);
+            setFilteredMultas(data);
+        })
+        .catch(error => console.error('Error al obtener las multas:', error));
     }, []);
+    
     
 
     // Filtrar multas basado en los filtros seleccionados
