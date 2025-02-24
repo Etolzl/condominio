@@ -3,6 +3,7 @@ import './Multas.css';
 import logoImage from './assets/imgs/logo.png';
 import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
+import { fetchInterceptor } from './fetchInterceptor';
 
 const Multas = () => {
     const navigate = useNavigate(); // Usamos el hook useNavigate para redirigir
@@ -13,6 +14,11 @@ const Multas = () => {
         fechaFin: '',
         estado: '',
     });
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        fetchInterceptor(navigate, setError);
+    }, [navigate]);
 
     // Realizamos la consulta a la API de Express
     useEffect(() => {
@@ -20,18 +26,26 @@ const Multas = () => {
         
         fetch('https://api-condominio-su1h.onrender.com/api/multas', {
             headers: { Authorization: `Bearer ${token}` },
+        })        
+        .then(response => {
+            if (response.status === 401) {
+                const data = response.json();
+                if (data.expired) {
+                    localStorage.clear();
+                    setError('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    navigate('/login');
+                }
+            }
+            return response.json();
         })
-        .then(response => response.json())
         .then(data => {
             //console.log("Multas recibidas:", data); // Agregar este console.log para depurar
             setMultas(data);
             setFilteredMultas(data);
         })
         .catch(error => console.error('Error al obtener las multas:', error));
-    }, []);
+    }, [navigate]);
     
-    
-
     // Filtrar multas basado en los filtros seleccionados
     useEffect(() => {
         const { fechaInicio, fechaFin, estado } = searchFilters;

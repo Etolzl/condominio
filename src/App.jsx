@@ -1,6 +1,6 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute'; // Importar ProtectedRoute
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute';
 import Login from './Login';
 import Bienvenida from './Bienvenida';
 import Dashboard from './Dashboard';
@@ -15,15 +15,24 @@ import AsignarPermiso from './asignarPermiso';
 import BienvenidaUsuario from './bienvenidaUsuario';
 import BienvenidaDueño from './bienvenidaDueño';
 import Notificaciones from './Notificaciones';
+import CambiarContra from './cambiarContra';
+import { fetchInterceptor } from './fetchInterceptor';
 
 const App = () => {
+    const navigate = useNavigate();
+    const [error, setError] = useState('');
+
+    // Configurar el interceptor de fetch solo una vez cuando la app se monta
+    useEffect(() => {
+        fetchInterceptor(navigate, setError);
+    }, [navigate]);
+
     return (
         <Routes>
-            {/* Ruta principal redirige a Login */}
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/cambiar-contraseña" element={<CambiarContra />} />
 
-            {/* Rutas protegidas */}
             <Route element={<ProtectedRoute />}>
                 <Route path="/bienvenida" element={<Bienvenida />} />
                 <Route path="/dashboard" element={<Dashboard />} />
@@ -40,7 +49,6 @@ const App = () => {
                 <Route path="/notificaciones" element={<Notificaciones />} />
             </Route>
 
-            {/* Ruta por defecto si la URL no existe */}
             <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
     );

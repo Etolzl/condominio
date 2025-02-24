@@ -1,21 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Importar jwtDecode
 import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
+import { fetchInterceptor } from './fetchInterceptor';
 
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificaciones, setNotificaciones] = useState([]);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
-    
+
+    useEffect(() => {
+        fetchInterceptor(navigate, setError);
+    }, [navigate]);
+
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const handleLogout = () => {
-        localStorage.clear(); // Limpiar almacenamiento local al cerrar sesión
-        navigate('/login');
+    const handleLogout = async () => {
+        const userid = localStorage.getItem('iduser');
+        console.log("Cerrando sesión para el usuario:", userid);
+    
+        try {
+            const response = await fetch('https://api-condominio-su1h.onrender.com/api/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userid }),
+            });
+    
+            if (!response.ok) {
+                const text = await response.text(); // Captura la respuesta incluso si no es JSON
+                console.error("Error al cerrar sesión:", text);
+            } else {
+                const result = await response.json();
+                console.log("Respuesta del servidor:", result);
+            }
+        } catch (error) {
+            console.error("Error al cerrar sesión:", error);
+        } finally {
+            localStorage.clear();
+            navigate('/login');
+        }
     };
 
     useEffect(() => {
@@ -58,7 +85,6 @@ const Navbar = () => {
             }
         }
     }, []);
-    
 
     return (
         <nav className="navbar">
