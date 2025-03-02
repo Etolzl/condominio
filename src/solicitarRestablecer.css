@@ -1,0 +1,123 @@
+/* Estilo del contenedor principal */
+.Solicitar-restablecer-container {
+    overflow: hidden;
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+/* Estilo del formulario */
+.Solicitar-restablecer-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilo del texto principal */
+.Solicitar-restablecer-form h2 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #8AB545;
+    text-align: center;
+    margin-bottom: 40px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Estilo del formulario */
+.Solicitar-restablecer-form form {
+    background-color: #fff;
+    width: 100%;
+    max-width: 500px;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Estilo del grupo de entrada */
+.Solicitar-restablecer-input-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Estilo de los campos de entrada */
+.Solicitar-restablecer-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.lada-input {
+    flex: 0.4; /* Ajusta el tamaño del campo de LADA */
+}
+
+.telefono-input {
+    flex: 0.6; /* Ajusta el tamaño del campo de teléfono */
+}
+
+.Solicitar-restablecer-input select,
+.Solicitar-restablecer-input input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fafafa;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.Solicitar-restablecer-input select:focus,
+.Solicitar-restablecer-input input[type="text"]:focus {
+    border-color: #8AB545;
+    outline: none;
+}
+
+/* Estilo del botón de solicitar restablecimiento */
+.Solicitar-restablecer-form button {
+    padding: 12px;
+    background-color: #8AB545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.Solicitar-restablecer-form button:hover {
+    background-color: #7a9e3d;
+}
+
+/* Estilo de las etiquetas */
+.Solicitar-restablecer-form label {
+    font-size: 14px;
+    color: #4a4a4a;
+    margin-bottom: 5px;
+}
+
+/* Estilo de los mensajes de error y éxito */
+.Solicitar-restablecer-form p {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.Solicitar-restablecer-form p[style*="color: red"] {
+    color: red;
+}
+
+.Solicitar-restablecer-form p[style*="color: green"] {
+    color: green;
+}

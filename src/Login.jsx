@@ -159,7 +159,7 @@ const Login = () => {
                     </form>
                     {error && <p className="error-message">{error}</p>}
                     <p className="forgot-password">
-                        <Link to="/cambiar-contraseña">¿Olvidaste tu contraseña?</Link>
+                        <Link to="/solicitar-restablecimiento">¿Olvidaste tu contraseña?</Link>
                     </p>
                 </div>
             </div>

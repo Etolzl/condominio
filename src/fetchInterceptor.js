@@ -3,14 +3,16 @@ export const fetchInterceptor = (navigate, setError) => {
 
     window.fetch = async (...args) => {
         const response = await originalFetch(...args);
-        const data = await response.clone().json().catch(() => null); // Intentar leer JSON sin romper la respuesta
+        const data = await response.clone().json().catch(() => null);
+        const currentUrl = window.location.href;
 
-        if (response.status === 401 || (data && data.eliminarToken)) {
-            // Eliminar token de localStorage, sessionStorage y de MongoDB
+        console.log("Interceptando respuesta:", response.status, "URL actual:", currentUrl);
+
+        // Excluir la ruta /cambiar-contra de la redirección al login
+        if (response.status === 401 && !currentUrl.includes("#/cambiar-contra/")) {
+            console.warn("Redirigiendo al login por error 401");
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Redirigir al login
             navigate('/login');
         }
 

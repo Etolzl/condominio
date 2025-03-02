@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "./cambiarContra.css";
 import logoImage from "./assets/imgs/logo.png";
 
-const CambiarContra = () => {
+const CambiarContraPerfil = () => {
     const [telefono, setTelefono] = useState('');
     const [nuevaContraseña, setNuevaContraseña] = useState('');
     const [mensaje, setMensaje] = useState('');
@@ -65,4 +65,4 @@ const CambiarContra = () => {
     );
 };
 
-export default CambiarContra;
+export default CambiarContraPerfil

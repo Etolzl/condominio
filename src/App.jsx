@@ -15,8 +15,11 @@ import AsignarPermiso from './asignarPermiso';
 import BienvenidaUsuario from './bienvenidaUsuario';
 import BienvenidaDueño from './bienvenidaDueño';
 import Notificaciones from './Notificaciones';
-import CambiarContra from './cambiarContra';
+import CambiarContraPerfil from './cambiarContra';
 import { fetchInterceptor } from './fetchInterceptor';
+import RestablecerContra from './restablecerContra';
+import SolicitarRestablecer from './solicitarRestablecer';
+
 
 const App = () => {
     const navigate = useNavigate();
@@ -31,7 +34,10 @@ const App = () => {
         <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/cambiar-contraseña" element={<CambiarContra />} />
+            <Route path="/cambiar-contraseña-perfil" element={<CambiarContraPerfil />} />
+            <Route path="/cambiar-contra/:token" element={<RestablecerContra />} />
+            <Route path="/solicitar-restablecimiento" element={<SolicitarRestablecer />} />
+
 
             <Route element={<ProtectedRoute />}>
                 <Route path="/bienvenida" element={<Bienvenida />} />
