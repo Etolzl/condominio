@@ -4,6 +4,7 @@ import logoImage from './assets/imgs/logo.png';
 import Navbar from './Navbar';
 import { Bar } from 'react-chartjs-2';
 import { useNavigate } from 'react-router-dom'; // Importar useNavigate
+const role = localStorage.getItem('perfil'); // Obtiene el rol del usuario
 
 const Pagos = () => {
     const navigate = useNavigate();
@@ -93,7 +94,12 @@ const Pagos = () => {
                         <option value="Pagado">Pagado</option>
                         <option value="Pendiente">Pendiente</option>
                     </select>
-                    <button onClick={handleAddPago} className="btn-action">Registrar Nuevo Pago</button>
+                    {/* Solo mostrar el botón si el usuario es administrador */}
+                        {role === 'Administrador' && (
+                            <button onClick={handleAddPago} className="btn-action">
+                                Registrar Nuevo Pago
+                            </button>
+                        )}
                 </div>
 
                 <div className="grafico">

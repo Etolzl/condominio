@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import './registrarPagos.css';
 import logoImage from './assets/imgs/logo.png';
@@ -6,6 +6,13 @@ import Navbar from './Navbar';
 
 const RegistrarPagos = () => {
     const navigate = useNavigate();
+    const role = localStorage.getItem('perfil'); // Obtiene el rol del usuario
+
+    useEffect(() => {
+        if (role !== 'Administrador') {
+            navigate('/pagos'); // Redirigir si no es admin
+        }
+    }, [role, navigate]);
 
     const handleRegisterPago = () => {
         // Lógica para registrar el pago (por ejemplo, enviar datos a una API)

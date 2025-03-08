@@ -5,6 +5,8 @@ import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import { fetchInterceptor } from './fetchInterceptor';
 
+const role = localStorage.getItem('perfil'); // Obtiene el rol del usuario
+
 const Multas = () => {
     const navigate = useNavigate(); // Usamos el hook useNavigate para redirigir
     const [multas, setMultas] = useState([]);
@@ -98,28 +100,36 @@ const Multas = () => {
                         <option value="Pagada">Pagada</option>
                         <option value="Pendiente">Pendiente</option>
                     </select>
-                    <button onClick={handleCrearMulta} className="btn-action">Crear Nueva Multa</button>
+                    {/* Solo mostrar el botón si el usuario es administrador */}
+                        {role === 'Administrador' && (
+                            <button onClick={handleCrearMulta} className="btn-action">
+                                Crear Nueva Multa
+                            </button>
+                        )}
                 </div>
             </div>
 
             <div className="multas-list">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Departamento</th>
-                            <th>Fecha</th>
-                            <th>Monto</th>
-                            <th>Estado</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredMultas.map((multa) => (
-                            <tr key={multa._idmulta}>
-                                <td>{multa.departamento.nombreDepartamento}</td>
-                                <td>{multa.fecha}</td>
-                                <td>${multa.monto}</td>
-                                <td>{multa.estadoDelPago}</td>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Departamento</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        {/* Mostrar la columna "Acción" solo si el usuario es Administrador */}
+                        {role === 'Administrador' && <th>Acción</th>}
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredMultas.map((multa) => (
+                        <tr key={multa._idmulta}>
+                            <td>{multa.departamento.nombreDepartamento}</td>
+                            <td>{multa.fecha}</td>
+                            <td>${multa.monto}</td>
+                            <td>{multa.estadoDelPago}</td>
+                            {/* Mostrar el botón solo si el usuario es Administrador */}
+                            {role === 'Administrador' && (
                                 <td>
                                     <button
                                         onClick={() => handleActualizarEstado(multa._idmulta)}
@@ -128,10 +138,11 @@ const Multas = () => {
                                         {multa.estadoDelPago === 'Pendiente' ? 'Marcar como Pagada' : 'Marcar como Pendiente'}
                                     </button>
                                 </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             </div>
         </div>
     );

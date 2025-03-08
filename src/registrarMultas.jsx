@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 import './registrarMultas.css';
 import logoImage from './assets/imgs/logo.png';
 import Navbar from './Navbar';
+const role = localStorage.getItem('perfil'); // Obtiene el rol del usuario
 
 const RegistrarMultas = () => {
   const navigate = useNavigate();
@@ -18,6 +19,12 @@ const RegistrarMultas = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const modalRef = useRef(null); // Crear una referencia para el modal
+
+  useEffect(() => {
+    if (role !== 'Administrador') {
+        navigate('/multas'); // Redirigir si no es admin
+    }
+}, [role, navigate]);
 
   useEffect(() => {
     const token = localStorage.getItem("token"); // Obtener el token almacenado
@@ -104,7 +111,7 @@ const RegistrarMultas = () => {
       .catch((error) => {
         console.error('Error registrando la multa:', error);
         setLoading(false);
-        setModalMessage('Error registrando la multa. Inténtalo de nuevo.');
+        setModalMessage('Error registrando la multa. No tienes Permisos para Realizar esta Accion. Inténtalo de nuevo con un Usuario Valido.');
         setShowModal(true);
       });
   };

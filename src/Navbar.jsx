@@ -5,6 +5,8 @@ import './Navbar.css';
 import logoImage from './assets/imgs/logo.png';
 import { fetchInterceptor } from './fetchInterceptor';
 
+const perfil = localStorage.getItem('perfil');
+
 const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [notificaciones, setNotificaciones] = useState([]);
@@ -99,27 +101,18 @@ const Navbar = () => {
                     {menuOpen ? '✖' : '☰'}
                 </button>
                 <ul className={`navbar-menu ${menuOpen ? 'show' : ''}`}>
-                    <li>
-                        <Link to="/bienvenida">Inicio</Link>
-                    </li>
-                    <li>
-                        <Link to="/dashboard">Panel de Control</Link>
-                    </li>
-                    <li>
-                        <Link to="/usuarios">Administrar Usuarios</Link>
-                    </li>
-                    <li>
-                        <Link to="/pagos">Administrar Pagos</Link>
-                    </li>
-                    <li>
-                        <Link to="/multas">Administrar Multas</Link>
-                    </li>
-                    <li>
-                        <Link to="/permisos">Permisos de Portones</Link>
-                    </li>
+                    <li><Link to="/bienvenida">Inicio</Link></li>
+                    <li><Link to="/dashboard">Panel de Control</Link></li>
+                    {(perfil === "Administrador") && (
+                        <>
+                            <li><Link to="/usuarios">Administrar Usuarios</Link></li>
+                            <li><Link to="/permisos">Permisos de Portones</Link></li>
+                        </>
+                    )}
+                    <li><Link to="/pagos">Administrar Pagos</Link></li>
+                    <li><Link to="/multas">Administrar Multas</Link></li>
                 </ul>
-
-                {/* Sección de notificaciones */}
+    
                 <div className="notificaciones">
                     <button
                         className="notificaciones-boton"
@@ -128,7 +121,7 @@ const Navbar = () => {
                         Notificaciones ({notificaciones.length})
                     </button>
                 </div>
-
+    
                 <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
             </div>
         </nav>
